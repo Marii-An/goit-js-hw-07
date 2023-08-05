@@ -5,9 +5,20 @@ const gallery = document.querySelector(".js-gallery");
 
 const markup = galleryItems
   .map(
-    ({ preview, description, original }) => `<li class="js-target">
-    <img class="gallery__item gallery__image js-target" src="${preview}" alt="${description}" data-source="${original}">
-</li >`
+    ({
+      preview,
+      description,
+      original,
+    }) => `<li class="gallery__item js-target js-target">
+  <a class="gallery__link" href="${original}">
+    <img
+      class="gallery__image js-target"
+      src="${preview}"
+      data-source="${original}"
+      alt="${description}"
+    />
+  </a>
+</li>`
   )
   .join("");
 
@@ -25,13 +36,13 @@ function onClick(event) {
     event.target.closest(".js-target").dataset.source;
 
   const currentItem = galleryItems.find(({ original }) => original === bigImg);
-  console.log(currentItem);
 
   const instance = basicLightbox.create(
     `
 <div>
   <img
     class="gallery__link"
+    width="800px"
     src="${currentItem.original}"
     alt="${currentItem.description}"
   />
@@ -39,6 +50,11 @@ function onClick(event) {
 `
   );
 
-  console.log(instance);
   instance.show();
+
+  document.addEventListener("keydown", (evt) => {
+    if (evt.code === "Escape") {
+      instance.close();
+    }
+  });
 }
